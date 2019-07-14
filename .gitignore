@@ -1,0 +1,15 @@
+# Dependency directory
+node_modules/
+
+# Sqlite DB folder
+db/
+
+# Editor files/folders
+*.code-workspace
+.vscode/
+
+# Personal code snippets
+reference.md
+
+# Private config info
+config.json
