@@ -15,7 +15,6 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-
 var db = new DB;
 db.init("./db/test.db")
 
