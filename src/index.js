@@ -15,7 +15,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-var db = new DB;
+let db = new DB;
 db.init("./db/test.db")
 
 client.on('ready', () => {
@@ -24,7 +24,20 @@ client.on('ready', () => {
 
 
 client.on('message', msg => {
-    
+    if (msg.content.startsWith(leader)) {
+        console.log("Good!")
+        let tokens = msg.content.slice(1).split(" ");
+
+        // if (!client.commands.has(command)) return;
+
+        try {
+            console.log(client.commands)
+            client.commands.get(tokens[1]).execute(msg);
+        } catch (error) {
+            console.log(error)
+            msg.reply(`${tokens[1]} is not a recognized command.`)
+        }
+    }
 });
 
 client.login(token)
