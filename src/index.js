@@ -25,7 +25,7 @@ client.on('ready', () => {
 
 // let karma = new KarmaTracker(client);
 
-// Karma tracker should be centered around the messageReactionAdd event whic triggers
+// Karma tracker should be centered around the messageReactionAdd event which triggers
 // whenever a reaction is added to a cached post. 
 client.on('messageReactionAdd', (reaction, user) => {
     reaction.message.reply("Reaction made!")
