@@ -1,11 +1,12 @@
 // Imports
+
 const fs = require('fs');
 const Discord = require('discord.js');
 const DB = require('./db-util');
 const KarmaTracker = require('./karma-tracker');
 
 // Config and setup
-const { token, leader } = require('../config.json');
+const { token, prefix } = require('../config.json');
 const client = new Discord.Client();
 // Create a dispatch dictionary for commands
 // As per: https://discordjs.guide/command-handling/#dynamically-reading-command-files
@@ -34,7 +35,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 });
 
 client.on('message', msg => {
-    if (msg.content.startsWith(leader)) {
+    if (msg.content.startsWith(prefix)) {
         console.log("Good!")
         let tokens = msg.content.slice(1).split(" ");
 
