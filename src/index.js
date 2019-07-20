@@ -1,8 +1,7 @@
 // Imports
-
 const fs = require('fs');
 const Discord = require('discord.js');
-const DB = require('./db-util');
+
 const KarmaTracker = require('./karma-tracker');
 
 // Config and setup
@@ -17,21 +16,19 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-let db = new DB;
-db.init("./db/test.db")
+// let db = new DB;
+// db.init("./db/test.db")
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-// let karma = new KarmaTracker(client);
+let karma = new KarmaTracker(client);
 
 // Karma tracker should be centered around the messageReactionAdd event which triggers
 // whenever a reaction is added to a cached post. 
 client.on('messageReactionAdd', (reaction, user) => {
-    reaction.message.reply("Reaction made!")
-    .then()
-    .catch(console.error)
+    karma.collectVotes(reaction);
 });
 
 client.on('message', msg => {

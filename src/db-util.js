@@ -1,25 +1,52 @@
-const sqlite3 = require('sqlite3');
+const sqlite3 = require('sqlite3').verbose();
 
 class DB {
-    init(path) {
-        this.db = new sqlite3.Database(path, (err) => {
-            if (err) {
-                console.log(err.message)
-            } else {
-                console.log(`Connected to DB at ${path}`)
-            }
-        });
-        this.db.close();
+    constructor(path) {
+        this.path = path;
     }
 
-    close() {
-        this.db.close((err) => {
+    openDatabase() {
+        let db = new sqlite3.Database(this.path, (err) => {
             if (err) {
                 console.log(err.message)
             } else {
-                console.log("Database closed")
+                console.log(`Connected to DB at ${this.path}`)
             }
         });
+        return db;
+    }
+    
+    initTable(tableName) {
+        let db = this.openDatabase();
+        this.tableName = tableName;
+        let initString = `CREATE TABLE IF NOT EXISTS ${this.tableName}(tag text, karma integer)`
+        db.run(initString);
+        db.close()
+    }
+
+    queryKarma(userTag) {
+        let db = this.openDatabase();
+        let queryString = `SELECT karma FROM ${this.tableName} where tag = "${userTag}"`;
+        const result = db.get(queryString, (err, row) => {
+            if (err) {
+                console.log(err);
+                return;
+            } else {
+                if (row === undefined) {
+                    console.log("No results");
+                } else {
+                    console.log(row)
+                }
+            }
+        });
+        db.close();
+    }
+
+    addUser(userTag) {
+        let db = this.openDatabase();
+        let initString = `INSERT INTO ${this.tableName} VALUES("${userTag}", 0)`
+        db.run(initString);
+        db.close();
     }
 }
 
