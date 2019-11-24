@@ -1,6 +1,7 @@
 // Imports
 const fs = require('fs');
 const Discord = require('discord.js');
+const DB = require("./db-util.js");
 
 const KarmaTracker = require('./karma-tracker');
 
@@ -16,8 +17,8 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-// let db = new DB;
-// db.init("./db/test.db")
+// let db = new DB("./db/test.db");
+// db.initTable("users");
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);

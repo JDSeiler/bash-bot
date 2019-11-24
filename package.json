@@ -5,6 +5,7 @@
   "main": "./src/index.js",
   "dependencies": {
     "discord.js": "^11.5.1",
+    "nodemon": "^1.19.4",
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {},
