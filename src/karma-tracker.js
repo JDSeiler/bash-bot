@@ -5,15 +5,15 @@ class KarmaTracker extends emitter {
     constructor(client) {
         super();
         this.client = client;
+        const { upvote, downvote} = require('../config.json');
+        this.upvote = upvote;
+        this.downvote = downvote;
     }
     // TODO: Actually develop
     collectVotes(messageReaction) {
-        let db = new DB("/home/jordan/Projects/bash-bot/src/db/test.db");
+        let db = new DB("./src/db/test.db");
         const authorID = messageReaction.message.author.id;
         const reaction = messageReaction.emoji.identifier;
-        // TODO: Move into configurable file
-        const upVote = "%E2%AC%86%EF%B8%8F";
-        const downVote = "%E2%AC%87";
         const userName = "Dave";
         db.queryUserKarma(authorID, (err, row) => {
             if (err) {
@@ -34,9 +34,9 @@ class KarmaTracker extends emitter {
                 console.log("No fatal errors (does not indicate success)");
             }
         });
-        if (reaction === upVote) {
+        if (reaction === this.upvote) {
             console.log("Upvoted!");
-        } else if (reaction === downVote) {
+        } else if (reaction === this.downvote) {
             console.log("Downvoted!");
         } else {
             console.log("Unrecognized");

@@ -1,8 +1,10 @@
 const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 
 class DB {
-    constructor(path) {
-        this.path = path;
+    constructor(inputPath) {
+        this.path = path.resolve(inputPath);
+        console.log(this.path);
         this.tableName = "userKarma"
         this.initTable();
     }
