@@ -6,7 +6,8 @@ const DB = require("./db-util.js");
 const KarmaTracker = require('./karma-tracker');
 
 // Config and setup
-const { token, prefix } = require('../config.json');
+const { token } = require('../user-secrets.json');
+const { prefix } = require('../config.json');
 const client = new Discord.Client();
 // Create a dispatch dictionary for commands
 // As per: https://discordjs.guide/command-handling/#dynamically-reading-command-files
@@ -16,9 +17,6 @@ for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
-
-// let db = new DB("./db/test.db");
-// db.initTable("users");
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -36,9 +34,6 @@ client.on('message', msg => {
     if (msg.content.startsWith(prefix)) {
         console.log("Good!")
         let tokens = msg.content.slice(1).split(" ");
-
-        // if (!client.commands.has(command)) return;
-
         try {
             console.log(client.commands)
             client.commands.get(tokens[1]).execute(msg);
