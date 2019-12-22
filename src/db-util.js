@@ -30,6 +30,13 @@ class DB {
         return db;
     }
 
+    addUser(user, callback) {
+        let db = this.openDatabase();
+        let queryString = `INSERT INTO userKarma VALUES('${user}', 1);`;
+        db.run(queryString, callback);
+        db.close();
+    }
+
     queryUserKarma(user, callback) {
         let db = this.openDatabase();
         let queryString = `SELECT karma FROM userKarma WHERE tag IS '${user}';`;
@@ -43,6 +50,8 @@ class DB {
         db.run(updateString, callback);
         db.close();
     }
+
+
 }  
 
 module.exports = DB
