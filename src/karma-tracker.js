@@ -11,22 +11,36 @@ class KarmaTracker extends emitter {
     }
     // TODO: Actually develop
     async collectVotes(messageReaction) {
-        const db = await new DB("./src/db/test.db");
+        // const db = await new DB("./src/db/test.db");
         const authorID = messageReaction.message.author.id;
         const reaction = messageReaction.emoji.identifier;
+        console.log(reaction);
         const userName = "Dave";
-        db.queryUserKarma("Dave").then((value) =>{
-            console.log(value);
-        });
         if (reaction === this.upvoteEmoji) {
             console.log("Upvoted!");
+            this.changeKarma(userName, 1);
         } else if (reaction === this.downvoteEmoji) {
             console.log("Downvoted!");
+            this.changeKarma (userName, -1);
         } else {
             console.log("Unrecognized");
         }
+    }
 
-
+    async changeKarma(userID, change) {
+        try {
+            const db = await new DB("./src/db/test.db");
+            const returnRow = await db.queryUserKarma(userID);
+            if (typeof returnRow == 'undefined') {
+                console.log(`${userID} returns undefined, attempting to create entry..`)
+                await db.addUser(userID);
+            } else {
+                const karma = returnRow.karma
+                await db.setUserKarma(userID, karma + change);
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 
