@@ -25,32 +25,47 @@ class DB {
     }
 
     async openDatabase() {
-        const db = await sqlite.open(this.path, { verbose: true });
-        return db;
+        try {
+            const db = await sqlite.open(this.path, { verbose: true });
+            return db;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    addUser(user, callback) {
-        let db = this.openDatabase();
-        let queryString = `INSERT INTO userKarma VALUES('${user}', 1);`;
-        db.run(queryString, callback);
-        db.close();
+    async addUser(user) {
+        try {
+            const db = await this.openDatabase();
+            const queryString = `INSERT INTO userKarma VALUES('${user}', 1);`;
+            await db.run(queryString);
+            await db.close();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    queryUserKarma(user) {
-        let db = this.openDatabase();
-        let queryString = `SELECT karma FROM userKarma WHERE tag IS '${user}';`;
-        db.get(queryString);
-        db.close();
+    async queryUserKarma(user) {
+        try {
+            const db = await this.openDatabase();
+            const queryString = `SELECT karma FROM userKarma WHERE tag IS '${user}';`;
+            const result = await db.get(queryString);
+            await db.close();
+            return result;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    setUserKarma(user, newKarma, callback) {
-        let db = this.openDatabase();
-        let updateString = `UPDATE userKarma SET karma = ${newKarma} WHERE tag IS '${user}';`;
-        db.run(updateString, callback);
-        db.close();
+    async setUserKarma(user, newKarma) {
+        try {
+            const db = await this.openDatabase();
+            const updateString = `UPDATE userKarma SET karma = ${newKarma} WHERE tag IS '${user}';`;
+            await db.run(updateString);
+            await db.close();
+        } catch (err) {
+            console.log(err);
+        }
     }
-
-
 }  
 
 module.exports = DB

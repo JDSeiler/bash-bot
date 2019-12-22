@@ -15,7 +15,9 @@ class KarmaTracker extends emitter {
         const authorID = messageReaction.message.author.id;
         const reaction = messageReaction.emoji.identifier;
         const userName = "Dave";
-
+        db.queryUserKarma("Dave").then((value) =>{
+            console.log(value);
+        });
         if (reaction === this.upvoteEmoji) {
             console.log("Upvoted!");
         } else if (reaction === this.downvoteEmoji) {
