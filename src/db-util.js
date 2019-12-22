@@ -1,4 +1,4 @@
-const sqlite3 = require('sqlite3').verbose();
+const sqlite = require('sqlite');
 const path = require('path');
 
 class DB {
@@ -9,24 +9,23 @@ class DB {
         this.initTable();
     }
     
-    initTable() {
-        let db = this.openDatabase();
-        const initString = `CREATE TABLE IF NOT EXISTS ${this.tableName}(
+    async initTable() {
+        try {
+            let db = await this.openDatabase();
+            const initString = `CREATE TABLE IF NOT EXISTS ${this.tableName}(
             tag TEXT, 
             karma INTEGER,
             UNIQUE(tag));`;
-        db.run(initString);
-        db.close();
+            await db.run(initString);
+            db.close();
+        } catch (err) {
+            console.log(err);
+        }
+        
     }
 
-    openDatabase() {
-        let db = new sqlite3.Database(this.path, (err) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                console.log(`Connected to DB at ${this.path}`)
-            }
-        });
+    async openDatabase() {
+        const db = await sqlite.open(this.path, { verbose: true });
         return db;
     }
 
@@ -37,10 +36,10 @@ class DB {
         db.close();
     }
 
-    queryUserKarma(user, callback) {
+    queryUserKarma(user) {
         let db = this.openDatabase();
         let queryString = `SELECT karma FROM userKarma WHERE tag IS '${user}';`;
-        db.get(queryString, callback);
+        db.get(queryString);
         db.close();
     }
 
