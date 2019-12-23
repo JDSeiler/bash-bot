@@ -4,7 +4,6 @@ const path = require('path');
 class DB {
     constructor(inputPath) {
         this.path = path.resolve(inputPath);
-        console.log(this.path);
         this.tableName = "userKarma"
         this.initTable();
     }

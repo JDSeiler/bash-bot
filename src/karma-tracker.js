@@ -9,13 +9,10 @@ class KarmaTracker extends emitter {
         this.upvoteEmoji = upvote;
         this.downvoteEmoji = downvote;
     }
-    // TODO: Actually develop
+
     async collectVotes(messageReaction) {
-        // const db = await new DB("./src/db/test.db");
         const authorID = messageReaction.message.author.id;
         const reaction = messageReaction.emoji.identifier;
-        console.log(reaction);
-        const userName = "Dave";
         if (reaction === this.upvoteEmoji) {
             console.log("Upvoted!");
             this.changeKarma(userName, 1);
