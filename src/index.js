@@ -37,7 +37,19 @@ client.on('message', msg => {
         console.log(tokens);
         const commandName = tokens[0];
         try {
-            client.commands.get(commandName).execute(msg, tokens.slice(1));
+            if (commandName == 'help') {
+                if (tokens.length == 2) {
+                    msg.channel.send(client.commands.get(tokens[1]).help)
+                } else if (tokens.length == 1) {
+                    client.commands.forEach((value, _, __) => {
+                        msg.channel.send(value.help);
+                    });
+                } else {
+                    msg.channel.send("Help takes either a single command name as an argument, or no arguments.")
+                }
+            } else {
+                client.commands.get(commandName).execute(msg, tokens.slice(1));
+            }
         } catch (err) {
             console.log(err)
             msg.reply(`${commandName} is not a recognized command.`)
