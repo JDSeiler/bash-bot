@@ -32,14 +32,15 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 client.on('message', msg => {
     if (msg.content.startsWith(prefix)) {
-        console.log("Good!")
-        let tokens = msg.content.slice(1).split(" ");
+        console.log("Prefixed message detected")
+        const tokens = msg.content.slice(1).split(" ");
+        console.log(tokens);
+        const commandName = tokens[0];
         try {
-            console.log(client.commands)
-            client.commands.get(tokens[1]).execute(msg);
-        } catch (error) {
-            console.log(error)
-            msg.reply(`${tokens[1]} is not a recognized command.`)
+            client.commands.get(commandName).execute(msg, tokens.slice(1));
+        } catch (err) {
+            console.log(err)
+            msg.reply(`${commandName} is not a recognized command.`)
         }
     }
 });
