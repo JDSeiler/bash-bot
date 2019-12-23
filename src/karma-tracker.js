@@ -15,10 +15,10 @@ class KarmaTracker extends emitter {
         const reaction = messageReaction.emoji.identifier;
         if (reaction === this.upvoteEmoji) {
             console.log("Upvoted!");
-            this.changeKarma(userName, 1);
+            this.changeKarma(authorID, 1);
         } else if (reaction === this.downvoteEmoji) {
             console.log("Downvoted!");
-            this.changeKarma (userName, -1);
+            this.changeKarma(authorID, -1);
         } else {
             console.log("Unrecognized");
         }
