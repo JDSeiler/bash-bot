@@ -65,6 +65,17 @@ class DB {
             console.log(err);
         }
     }
+
+    async queryTopUsers() {
+        try {
+            const db = await this.openDatabase();
+            const queryString = `SELECT * FROM userKarma ORDER BY karma DESC;`;
+            const results = await db.all(queryString);
+            return results;
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }  
 
 module.exports = DB
