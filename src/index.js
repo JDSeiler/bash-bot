@@ -1,14 +1,27 @@
 // Imports
-const fs = require('fs');
+const bunyan = require('bunyan');
 const Discord = require('discord.js');
+const fs = require('fs');
+const path = require('path');
 const DB = require("./db-util.js");
-
 const KarmaTracker = require('./karma-tracker');
 
 // Config and setup
 const { token } = require('../user-secrets.json');
 const { prefix } = require('../config.json');
 const client = new Discord.Client();
+const logger = bunyan.createLogger({
+    name: "index.js",
+    streams: [{
+        path: path.resolve("./log/combined.log")
+    },
+    {
+        stream: process.stdout
+    }],
+    src: true
+})
+
+
 // Create a dispatch dictionary for commands
 // As per: https://discordjs.guide/command-handling/#dynamically-reading-command-files
 client.commands = new Discord.Collection();
@@ -51,7 +64,7 @@ client.on('message', msg => {
                 client.commands.get(commandName).execute(msg, tokens.slice(1));
             }
         } catch (err) {
-            console.log(err)
+            logger.info(err);
             msg.reply(`${commandName} is not a recognized command.`)
         }
     }
