@@ -4,6 +4,9 @@ node_modules/
 # Sqlite DB folder
 db/
 
+# Local logs folder
+log/
+
 # Editor files/folders
 *.code-workspace
 .vscode/
