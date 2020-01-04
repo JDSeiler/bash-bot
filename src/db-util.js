@@ -1,5 +1,18 @@
+const bunyan = require('bunyan');
 const sqlite = require('sqlite');
 const path = require('path');
+const logger = bunyan.createLogger({
+    name: "db-utils.js",
+    streams: [{
+        path: path.resolve("./log/combined.log")
+    },
+    {
+        stream: process.stdout
+    }],
+    src: true
+})
+
+
 
 class DB {
     constructor(inputPath) {
@@ -18,7 +31,7 @@ class DB {
             await db.run(initString);
             db.close();
         } catch (err) {
-            console.log(err);
+            logger.warn(err);
         }
         
     }
@@ -28,7 +41,7 @@ class DB {
             const db = await sqlite.open(this.path, { verbose: true });
             return db;
         } catch (err) {
-            console.log(err);
+            logger.warn(err);
         }
     }
 
@@ -39,7 +52,7 @@ class DB {
             await db.run(queryString);
             await db.close();
         } catch (err) {
-            console.log(err);
+            clogger.warn(err);
         }
     }
 
@@ -51,7 +64,7 @@ class DB {
             await db.close();
             return result;
         } catch (err) {
-            console.log(err);
+            logger.warn(err);
         }
     }
 
@@ -62,7 +75,7 @@ class DB {
             await db.run(updateString);
             await db.close();
         } catch (err) {
-            console.log(err);
+            logger.warn(err);
         }
     }
 
@@ -73,7 +86,7 @@ class DB {
             const results = await db.all(queryString);
             return results;
         } catch (err) {
-            console.log(err);
+            logger.warn(err);
         }
     }
 }  
