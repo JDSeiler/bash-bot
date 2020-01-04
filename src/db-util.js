@@ -77,10 +77,15 @@ class DB {
         }
     }
 
-    async queryTopUsers() {
+    async queryTopUsers(queryLimit) {
+        if (typeof queryLimit === 'undefined') {
+            queryLimit = 25;
+        } else {
+            queryLimit = queryLimit
+        }
         try {
             const db = await this.openDatabase();
-            const queryString = `SELECT * FROM userKarma ORDER BY karma DESC;`;
+            const queryString = `SELECT * FROM userKarma ORDER BY karma DESC LIMIT ${queryLimit};`;
             const results = await db.all(queryString);
             return results;
         } catch (err) {
