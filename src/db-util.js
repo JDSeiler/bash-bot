@@ -12,8 +12,6 @@ const logger = bunyan.createLogger({
     src: true
 })
 
-
-
 class DB {
     constructor(inputPath) {
         this.path = path.resolve(inputPath);

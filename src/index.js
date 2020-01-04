@@ -21,7 +21,6 @@ const logger = bunyan.createLogger({
     src: true
 })
 
-
 // Create a dispatch dictionary for commands
 // As per: https://discordjs.guide/command-handling/#dynamically-reading-command-files
 client.commands = new Discord.Collection();
