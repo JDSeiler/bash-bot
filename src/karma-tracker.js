@@ -1,5 +1,6 @@
-const DB = require('./db-util.js');
+const path = require('path');
 const bunyan = require('bunyan');
+const DB = require('./db-util.js');
 const logger = bunyan.createLogger({
     name: "index.js",
     streams: [{
