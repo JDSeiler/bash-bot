@@ -34,6 +34,20 @@ class KarmaTracker {
         }
     }
 
+    async reverseVotes(messageReaction) {
+        const authorID = messageReaction.message.author.id;
+        const reaction = messageReaction.emoji.identifier;
+        if (reaction === this.upvoteEmoji) {
+            logger.info({unicode: reaction, result: "removed an upvote"});
+            this.changeKarma(authorID, -1);
+        } else if (reaction === this.downvoteEmoji) {
+            logger.info({unicode: reaction, result: "removed a downvote"});
+            this.changeKarma(authorID, 1);
+        } else {
+            logger.info({unicode: reaction, result: "unrecognized"});
+        }
+    }
+
     async changeKarma(userID, change) {
         try {
             const db = await new DB("./src/db/test.db");

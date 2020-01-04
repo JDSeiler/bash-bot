@@ -42,6 +42,10 @@ client.on('messageReactionAdd', (reaction, user) => {
     karma.collectVotes(reaction);
 });
 
+client.on('messageReactionRemove', (reaction, user) => {
+    karma.reverseVotes(reaction);
+});
+
 client.on('message', msg => {
     if (msg.content.startsWith(prefix)) {
         console.log("Prefixed message detected")
@@ -63,7 +67,7 @@ client.on('message', msg => {
                 client.commands.get(commandName).execute(msg, tokens.slice(1));
             }
         } catch (err) {
-            logger.info(err);
+            logger.warn({message: msg.content, err: err});
             msg.reply(`${commandName} is not a recognized command.`)
         }
     }
