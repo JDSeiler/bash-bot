@@ -1,4 +1,17 @@
 const DB = require('../db-util.js');
+const path = require('path');
+const bunyan = require('bunyan');
+
+const logger = bunyan.createLogger({
+    name: "index.js",
+    streams: [{
+        path: path.resolve("./log/combined.log")
+    },
+    {
+        stream: process.stdout
+    }],
+    src: true
+})
 
 module.exports = {
     name: "top",
@@ -12,22 +25,26 @@ of users specified, sorted by karma.",
     async execute(message, args) {
         const db = new DB("./src/db/test.db");
         const guild = message.guild;
-        if (guild.available) {
-            if (args.length === 1) {
-                const numberOfUsersToDisplay = Number(args[0]);
-                if (await this.validateArgument(numberOfUsersToDisplay) == true) {
-                    const results = await db.queryTopUsers(numberOfUsersToDisplay);
-                    this.displayMembers(message, guild, results);
-
+        try {
+            if (guild.available) {
+                if (args.length === 1) {
+                    const numberOfUsersToDisplay = Number(args[0]);
+                    if (await this.validateArgument(numberOfUsersToDisplay) == true) {
+                        const results = await db.queryTopUsers(numberOfUsersToDisplay);
+                        this.displayMembers(message, guild, results);
+    
+                    } else {
+                        message.reply(`${numberOfUsersToDisplay} is not a valid argument`);
+                    }
                 } else {
-                    message.reply(`${numberOfUsersToDisplay} is not a valid argument`);
+                    const results = await db.queryTopUsers();
+                    this.displayMembers(message, guild, results);
                 }
             } else {
-                const results = await db.queryTopUsers();
-                this.displayMembers(message, guild, results);
+                message.reply("Something went wrong when accessing this guild!").catch(console.log(error));
             }
-        } else {
-            message.reply("Something went wrong when accessing this guild!").catch(console.log(error));
+        } catch (err) {
+            logger.warn(err);
         }
     },
 
@@ -41,7 +58,7 @@ of users specified, sorted by karma.",
                     message.channel.send(`${row.tag} cannot be resolved into a server member.`);
                 }
             } catch (err) {
-                console.log(err);
+                logger.warn(err);
             }
         }
     },
@@ -51,7 +68,7 @@ of users specified, sorted by karma.",
             const guildMember = await guild.fetchMember(id);
             return guildMember;
         } catch (err) {
-            console.log(`Failed to fetch ${id}`);
+            logger.info({failingID: id, guildID: guild.id}, 'Failed to fetch %s', id);
         }
     },
 
