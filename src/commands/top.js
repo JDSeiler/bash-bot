@@ -11,22 +11,19 @@ of users specified, sorted by karma.",
 
     async execute(message, args) {
         const db = new DB("./src/db/test.db");
-        const results = await db.queryTopUsers();
         const guild = message.guild;
         if (guild.available) {
             if (args.length === 1) {
                 const numberOfUsersToDisplay = Number(args[0]);
                 if (await this.validateArgument(numberOfUsersToDisplay) == true) {
-                    if (numberOfUsersToDisplay >= results.length) {
-                        this.displayMembers(message, guild, results);
-                    } else {
-                        const resultsSlice = results.slice(0, numberOfUsersToDisplay);
-                        this.displayMembers(message, guild, resultsSlice);
-                    }
+                    const results = await db.queryTopUsers(numberOfUsersToDisplay);
+                    this.displayMembers(message, guild, results);
+
                 } else {
                     message.reply(`${numberOfUsersToDisplay} is not a valid argument`);
                 }
             } else {
+                const results = await db.queryTopUsers();
                 this.displayMembers(message, guild, results);
             }
         } else {
